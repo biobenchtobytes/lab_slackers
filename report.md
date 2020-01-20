@@ -12,3 +12,6 @@
 **Language/interpreter**  python
 
 - Example plotting options for Collaborative exercise
+
+Chez investigated the Number of direct messages per number of daily active members. As we can see, 6 members is enough to reach the maximum number of messages.
+
