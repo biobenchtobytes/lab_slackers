@@ -12,3 +12,7 @@
 
 # VSCode files
 *.vscode
+.Rproj.user
+
+# macbook files
+.DS_Store
