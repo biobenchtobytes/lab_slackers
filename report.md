@@ -12,3 +12,12 @@
 **Language/interpreter**  python
 
 - Example plotting options for Collaborative exercise
+
+## 2020-01-20 Report Draft
+
+
+Dezerae investigated the messages posted per day of the week. We can see that Slack is being used, even on the weekend, to pose up to 40 messages per day.
+
+!['messages_per_day'](dc_results/dc_messages_per_day.png)
+
+There is on average 18 messages posted per day during the week, and 8 messages posted per day on weekends.
