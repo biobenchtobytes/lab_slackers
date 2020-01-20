@@ -7,12 +7,4 @@ colnames(my_data) = c('A','B','C')
 my_plot = ggplot(my_data, aes(x = Daily.active.members, y = Messages.in.DMs)) + geom_point()
 my_plot
 ggsave('Chez_plot.png')
-ggplot
 
-
-x = c(-10:10)
-y = x^2
-df = data.frame(x,y)
-df
-plot = ggplot(df, aes(x=x,y=y))
-plot
