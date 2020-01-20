@@ -13,6 +13,7 @@
 
 - Example plotting options for Collaborative exercise
 
+
 ## 2020-01-20 Report Draft
 
 
@@ -21,3 +22,9 @@ Dezerae investigated the messages posted per day of the week. We can see that Sl
 !['messages_per_day'](dc_results/dc_messages_per_day.png)
 
 There is on average 18 messages posted per day during the week, and 8 messages posted per day on weekends.
+
+Chez investigated the Number of direct messages per number of daily active members. As we can see, 6 members is enough to reach the maximum number of messages.
+
+!['messages_per_active_members'](Raw_data/Chez_plot.png)
+
+
