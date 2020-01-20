@@ -53,4 +53,19 @@ plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
 plt.ylim(-10, 50)
 
+# Calculate mean and max of messages per weekday
+weekdays = np.arange(5)
+weekdays = summary_data[summary_data['day_of_week'].isin(weekdays)]
+mean_weekdays = np.mean(weekdays.groupby('day_of_week').mean()['total_messages'])
+max_weekdays = np.max(weekdays.groupby(
+    'day_of_week').mean()['total_messages'])
+
+
+# Calculate mean and max of messages per weekday
+weekends = [5, 6]
+weekends = summary_data[summary_data['day_of_week'].isin(weekends)]
+mean_weekends = np.mean(weekends.groupby(
+    'day_of_week').mean()['total_messages'])
+max_weekends = np.max(weekends.groupby(
+    'day_of_week').mean()['total_messages'])
 
