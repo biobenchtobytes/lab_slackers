@@ -1,8 +1,6 @@
 # log files
 *.log
 
-# Raw data
-/Raw_data/*
 
 # Generated Results
 /Flow_results/*
