@@ -13,7 +13,7 @@ from GEN_Utils import FileHandling
 logger.info('Import OK')
 
 input_path = 'Raw_data/raw_data.csv'
-output_folder = 'Python_results'
+output_folder = 'dc_results/'
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
@@ -34,10 +34,7 @@ ProfileReport(summary_data)
 
 summary_data.columns.tolist()
 
-# number of private versus messages per day
-fig, ax = plt.subplots()
-sns.lineplot(x='Date', y='Messages posted', data=summary_data)
-
+# number of messages per day
 fig, ax = plt.subplots()
 cmap = sns.cubehelix_palette(light=1, as_cmap=True)
 sns.kdeplot(data=summary_data['day_of_week'].astype(
@@ -45,8 +42,9 @@ sns.kdeplot(data=summary_data['day_of_week'].astype(
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
 plt.ylim(-10, 50)
+plt.savefig(f'{output_folder}dc_messages_per_day.png')
 
-
+# Scatterplot of messages per day
 fig, ax = plt.subplots()
 cmap = sns.cubehelix_palette(light=1, as_cmap=True)
 sns.swarmplot(x=summary_data['day_of_week'].astype(
@@ -54,3 +52,20 @@ sns.swarmplot(x=summary_data['day_of_week'].astype(
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
 plt.ylim(-10, 50)
+
+# Calculate mean and max of messages per weekday
+weekdays = np.arange(5)
+weekdays = summary_data[summary_data['day_of_week'].isin(weekdays)]
+mean_weekdays = np.mean(weekdays.groupby('day_of_week').mean()['total_messages'])
+max_weekdays = np.max(weekdays.groupby(
+    'day_of_week').mean()['total_messages'])
+
+
+# Calculate mean and max of messages per weekday
+weekends = [5, 6]
+weekends = summary_data[summary_data['day_of_week'].isin(weekends)]
+mean_weekends = np.mean(weekends.groupby(
+    'day_of_week').mean()['total_messages'])
+max_weekends = np.max(weekends.groupby(
+    'day_of_week').mean()['total_messages'])
+
