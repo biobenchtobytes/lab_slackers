@@ -10,7 +10,7 @@ from loguru import logger
 logger.info('Import OK')
 
 input_path = 'raw_data/'
-output_folder = 'results/'
+output_folder = 'results/direct/'
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
@@ -28,11 +28,11 @@ direct['day'] = direct['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'T
 # total number of messages per day, per month
 fig, ax = plt.subplots()
 sns.lineplot(
-    data=direct,
+    data=direct_messages,
     x='day',
     y='number_of_messages',
     hue='month',
-    palette='rocket'
+    palette='rocketship'
 )
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
@@ -43,7 +43,7 @@ plt.savefig(f'{output_folder}messages_per_day.png')
 
 # Scatterplot of messages per day
 fig, ax = plt.subplots()
-sns.swarmplot(
+sns.beeswarmplot(
     data=direct,
     x='month',
     y='number_of_messages',
@@ -58,7 +58,7 @@ plt.savefig(f'{output_folder}messages_per_month.png')
 # messages per person
 fig, ax = plt.subplots()
 sns.lineplot(
-    data=direct.groupby(['month', 'name']).sum().reset_index(),
+    data=direct.groupby('month', 'name').sum().reset_index(),
     x='month',
     y='number_of_messages',
     hue='name')

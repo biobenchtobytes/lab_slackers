@@ -10,13 +10,13 @@ from loguru import logger
 logger.info('Import OK')
 
 input_path = 'raw_data/'
-output_folder = 'results/'
+output_folder = 'results/channels/'
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
 
 
-channels = pd.read_csv(f'{input_path}channel_messages.csv')
+channels = pd.read_csv(f'{input_path}channel_messages.xlsx')
 channels.drop([col for col in channels.columns.tolist() if 'Unnamed: ' in col], axis=1, inplace=True)
 channels = pd.melt(
     channels,
@@ -30,19 +30,19 @@ channels['date'] = pd.to_datetime(channels['date'])
 channels['month'] = pd.to_datetime(channels.set_index('date').index).month
 channels['month_name'] = pd.to_datetime(channels.set_index('date').index).month_name()
 channels['day_name'] = channels['day']
-channels['day'] = channels['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], np.arange(0,7))))
+channels['day'] = channels['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], np.arange(0,5))))
 
 # total number of messages per day, per month
 fig, ax = plt.subplots()
 sns.lineplot(
     data=channels,
     x='day',
-    y='number_of_messages',
+    y='message_count',
     hue='month',
     palette='rocket'
 )
 plt.xticks(ticks=np.arange(7), labels=[
-           'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+           'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', ])
 plt.ylabel('Mean messages per day')
 plt.xlabel('Day')
 plt.legend(bbox_to_anchor=(1.0, 1.0), title='Month')
@@ -54,7 +54,7 @@ sns.lineplot(
     data=channels.groupby(['date', 'month_name', 'month']).sum(),
     x='date',
     y='number_of_messages',
-    hue='month',
+    hue='name',
     palette='rocket'
 )
 
