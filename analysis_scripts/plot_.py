@@ -4,68 +4,115 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import altair as alt
 
-from pandas_profiling import ProfileReport
 from loguru import logger
-from GEN_Utils import FileHandling
 
 logger.info('Import OK')
 
-input_path = 'Raw_data/raw_data.csv'
-output_folder = 'dc_results/'
+input_path = 'raw_data/'
+output_folder = 'results/'
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
 
-raw_data = pd.read_csv(input_path)
+direct = pd.read_csv(f'{input_path}direct_messages.csv')
+direct.drop([col for col in direct.columns.tolist() if 'Unnamed: ' in col], axis=1, inplace=True)
 
-# convert date-time column
-summary_data = raw_data.copy()
-summary_data['Date'] = pd.to_datetime(
-    summary_data['Date'], infer_datetime_format=True)
-summary_data['day_of_week'] = summary_data['Date'].dt.dayofweek
-summary_data['total_messages'] = summary_data['Messages in public channels'] + \
-    summary_data['Messages in private channels'] + \
-    summary_data['Messages in shared channels'] + \
-    summary_data['Messages in DMs']
-summary_data.describe()
-ProfileReport(summary_data)
+# Add month column, clean column types
+direct['date'] = pd.to_datetime(direct['date'])
+direct['month'] = pd.to_datetime(direct.set_index('date').index).month
+direct['month_name'] = pd.to_datetime(direct.set_index('date').index).month_name()
+direct['day_name'] = direct['day']
+direct['day'] = direct['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], np.arange(0,7))))
 
-summary_data.columns.tolist()
-
-# number of messages per day
+# total number of messages per day, per month
 fig, ax = plt.subplots()
-cmap = sns.cubehelix_palette(light=1, as_cmap=True)
-sns.kdeplot(data=summary_data['day_of_week'].astype(
-    int), data2=summary_data['total_messages'].astype(int), shade=True, cmap=cmap,)
+sns.lineplot(
+    data=direct,
+    x='day',
+    y='number_of_messages',
+    hue='month',
+    palette='rocket'
+)
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
-plt.ylim(-10, 50)
-plt.savefig(f'{output_folder}dc_messages_per_day.png')
+plt.ylabel('Mean messages per day')
+plt.xlabel('Day')
+plt.legend(bbox_to_anchor=(1.0, 1.0), title='Month')
+plt.savefig(f'{output_folder}messages_per_day.png')
 
 # Scatterplot of messages per day
 fig, ax = plt.subplots()
-cmap = sns.cubehelix_palette(light=1, as_cmap=True)
-sns.swarmplot(x=summary_data['day_of_week'].astype(
-    int), y=summary_data['total_messages'].astype(int))
+sns.swarmplot(
+    data=direct,
+    x='month',
+    y='number_of_messages',
+    hue='day_name')
+plt.xticks(ticks=np.arange(12), labels=
+           direct.groupby(['month', 'month_name']).sum().reset_index()['month_name'].tolist(), rotation=45)
+plt.ylabel('Messages per day')
+plt.xlabel('Month')
+plt.legend(bbox_to_anchor=(1.0, 1.0), title='Day')
+plt.savefig(f'{output_folder}messages_per_month.png')
+
+# messages per person
+fig, ax = plt.subplots()
+sns.lineplot(
+    data=direct.groupby(['month', 'name']).sum().reset_index(),
+    x='month',
+    y='number_of_messages',
+    hue='name')
+plt.xticks(ticks=np.arange(12), labels=
+           direct.groupby(['month', 'month_name']).sum().reset_index()['month_name'].tolist(), rotation=45)
+plt.ylabel('Total messages per month')
+plt.xlabel('Month')
+plt.legend(bbox_to_anchor=(1.0, 1.0), title='Lab member')
+plt.savefig(f'{output_folder}messages_per_member.png')
+
+
+channels = pd.read_csv(f'{input_path}channel_messages.csv')
+channels.drop([col for col in channels.columns.tolist() if 'Unnamed: ' in col], axis=1, inplace=True)
+channels = pd.melt(
+    channels,
+    id_vars=['date', 'day'],
+    value_vars=['general_gibberish', 'important_info', 'lab_laziness', 'exciting_experiments'],
+    var_name='channel',
+    value_name='number_of_messages',
+)
+# Add month column, clean column types
+channels['date'] = pd.to_datetime(channels['date'])
+channels['month'] = pd.to_datetime(channels.set_index('date').index).month
+channels['month_name'] = pd.to_datetime(channels.set_index('date').index).month_name()
+channels['day_name'] = channels['day']
+channels['day'] = channels['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], np.arange(0,7))))
+
+# total number of messages per day, per month
+fig, ax = plt.subplots()
+sns.lineplot(
+    data=channels,
+    x='day',
+    y='number_of_messages',
+    hue='month',
+    palette='rocket'
+)
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
-plt.ylim(-10, 50)
+plt.ylabel('Mean messages per day')
+plt.xlabel('Day')
+plt.legend(bbox_to_anchor=(1.0, 1.0), title='Month')
+plt.savefig(f'{output_folder}channels_per_day.png')
 
-# Calculate mean and max of messages per weekday
-weekdays = np.arange(5)
-weekdays = summary_data[summary_data['day_of_week'].isin(weekdays)]
-mean_weekdays = np.mean(weekdays.groupby('day_of_week').mean()['total_messages'])
-max_weekdays = np.max(weekdays.groupby(
-    'day_of_week').mean()['total_messages'])
+# plot sum of all channel messages over time
+fig, ax = plt.subplots()
+sns.lineplot(
+    data=channels.groupby(['date', 'month_name', 'month']).sum(),
+    x='date',
+    y='number_of_messages',
+    hue='month',
+    palette='rocket'
+)
 
-
-# Calculate mean and max of messages per weekday
-weekends = [5, 6]
-weekends = summary_data[summary_data['day_of_week'].isin(weekends)]
-mean_weekends = np.mean(weekends.groupby(
-    'day_of_week').mean()['total_messages'])
-max_weekends = np.max(weekends.groupby(
-    'day_of_week').mean()['total_messages'])
-
+plt.ylabel('Total messages per day')
+plt.xlabel('Date')
+plt.legend(bbox_to_anchor=(1.0, 1.0), title='Month')
+plt.savefig(f'{output_folder}channels_per_day.png')
