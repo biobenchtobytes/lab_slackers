@@ -1,0 +1,13 @@
+name: lab_slackers
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy
+  - pandas
+  - seaborn
+  - loguru
+  - ipykernel
+  - jupyter
+  - pip:
+    - names
