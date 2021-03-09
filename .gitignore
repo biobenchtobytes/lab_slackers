@@ -6,6 +6,7 @@
 /Flow_results/*
 /ImageJ_results/*
 /Python_results/*
+results/*
 
 # Annoying Office temp files
 *~$*
@@ -16,3 +17,4 @@
 
 # macbook files
 .DS_Store
+results/channels_per_day.png
