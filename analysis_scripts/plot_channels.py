@@ -61,4 +61,4 @@ sns.lineplot(
 plt.ylabel('Total messages per day')
 plt.xlabel('Date')
 plt.legend(bbox_to_anchor=(1.0, 1.0), title='Month')
-plt.savefig(f'{output_folder}channels_per_day.png')
+plt.savefig(f'{output_folder}channels_per_date.png')
