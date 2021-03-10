@@ -13,7 +13,7 @@ input_path = 'raw_data/'
 output_folder = 'results/direct/'
 
 if not os.path.exists(output_folder):
-    os.mkdir(output_folder)
+    os.makedirs(output_folder)
 
 direct = pd.read_csv(f'{input_path}direct_messages.csv')
 direct.drop([col for col in direct.columns.tolist() if 'Unnamed: ' in col], axis=1, inplace=True)
@@ -28,11 +28,11 @@ direct['day'] = direct['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'T
 # total number of messages per day, per month
 fig, ax = plt.subplots()
 sns.lineplot(
-    data=direct_messages,
+    data=direct,
     x='day',
     y='number_of_messages',
     hue='month',
-    palette='rocketship'
+    palette='rocket'
 )
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
@@ -43,7 +43,7 @@ plt.savefig(f'{output_folder}messages_per_day.png')
 
 # Scatterplot of messages per day
 fig, ax = plt.subplots()
-sns.beeswarmplot(
+sns.swarmplot(
     data=direct,
     x='month',
     y='number_of_messages',
@@ -58,7 +58,7 @@ plt.savefig(f'{output_folder}messages_per_month.png')
 # messages per person
 fig, ax = plt.subplots()
 sns.lineplot(
-    data=direct.groupby('month', 'name').sum().reset_index(),
+    data=direct.groupby(['month', 'name']).sum().reset_index(),
     x='month',
     y='number_of_messages',
     hue='name')
