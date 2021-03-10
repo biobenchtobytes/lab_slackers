@@ -13,7 +13,7 @@ input_path = 'raw_data/'
 output_folder = 'results/direct/'
 
 if not os.path.exists(output_folder):
-    os.mkdir(output_folder)
+    os.makedirs(output_folder)
 
 direct = pd.read_csv(f'{input_path}direct_messages.csv')
 direct.drop([col for col in direct.columns.tolist() if 'Unnamed: ' in col], axis=1, inplace=True)
