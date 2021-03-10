@@ -37,7 +37,7 @@ fig, ax = plt.subplots()
 sns.lineplot(
     data=channels,
     x='day',
-    y='message_count',
+    y='number_of_messages',
     hue='month',
     palette='rocket'
 )
