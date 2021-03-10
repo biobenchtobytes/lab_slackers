@@ -28,11 +28,11 @@ direct['day'] = direct['day'].map(dict(zip(['Monday', 'Tuesday', 'Wednesday', 'T
 # total number of messages per day, per month
 fig, ax = plt.subplots()
 sns.lineplot(
-    data=direct_messages,
+    data=direct,
     x='day',
     y='number_of_messages',
     hue='month',
-    palette='rocketship'
+    palette='rocket'
 )
 plt.xticks(ticks=np.arange(7), labels=[
            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
