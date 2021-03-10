@@ -54,7 +54,7 @@ sns.lineplot(
     data=channels.groupby(['date', 'month_name', 'month']).sum(),
     x='date',
     y='number_of_messages',
-    hue='name',
+    hue='month_name',
     palette='rocket'
 )
 
