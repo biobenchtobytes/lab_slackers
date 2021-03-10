@@ -13,7 +13,7 @@ input_path = 'raw_data/'
 output_folder = 'results/channels/'
 
 if not os.path.exists(output_folder):
-    os.mkdir(output_folder)
+    os.makedirs(output_folder)
 
 
 channels = pd.read_csv(f'{input_path}channel_messages.xlsx')
