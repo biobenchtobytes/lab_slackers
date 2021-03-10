@@ -16,7 +16,7 @@ if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
 
-channels = pd.read_csv(f'{input_path}channel_messages.xlsx')
+channels = pd.read_csv(f'{input_path}channel_messages.csv')
 channels.drop([col for col in channels.columns.tolist() if 'Unnamed: ' in col], axis=1, inplace=True)
 channels = pd.melt(
     channels,
