@@ -58,7 +58,7 @@ plt.savefig(f'{output_folder}messages_per_month.png')
 # messages per person
 fig, ax = plt.subplots()
 sns.lineplot(
-    data=direct.groupby('month', 'name').sum().reset_index(),
+    data=direct.groupby(['month', 'name']).sum().reset_index(),
     x='month',
     y='number_of_messages',
     hue='name')
