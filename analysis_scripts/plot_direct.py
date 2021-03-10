@@ -43,7 +43,7 @@ plt.savefig(f'{output_folder}messages_per_day.png')
 
 # Scatterplot of messages per day
 fig, ax = plt.subplots()
-sns.beeswarmplot(
+sns.swarmplot(
     data=direct,
     x='month',
     y='number_of_messages',
